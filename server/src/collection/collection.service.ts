@@ -16,7 +16,7 @@ export class CollectionService {
     const createdAt = new Date();
 
     const cards = [];
-    console.log(dto)
+
     for (const cardDto of dto.cards) {
       const card = await this.cardModel.create({
         ...cardDto,
@@ -44,7 +44,6 @@ export class CollectionService {
 
   async getOne(id: ObjectId): Promise<Collection> {
     const collection= await this.CollectionModel.findById(id).populate({path: 'cards'}).exec();
-    console.log(collection);
     return collection;
   }
 
@@ -72,7 +71,11 @@ export class CollectionService {
       throw new NotFoundException('Collection not found');
     }
 
+    collection.cards = collection.cards.filter((card) => '' + card !== String(cardId));
+
     const card = await this.cardModel.findByIdAndDelete(cardId);
+    await collection.save();
+
     return card._id;
   }
 }
