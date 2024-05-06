@@ -27,7 +27,6 @@ type ICollectionCardComponentProps = Omit<ICollection, 'cards'> & {
     cardAmount: number
 };
 
-
 export const CollectionCard: FC<ICollectionCardComponentProps> = ({ author, description, title, _id, onRemove, cardAmount }) => {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
     const [isRemoveModal, setIsRemoveModal] = useState(false);
@@ -44,7 +43,6 @@ export const CollectionCard: FC<ICollectionCardComponentProps> = ({ author, desc
         onRemove({ id: _id });
         setIsRemoveModal(false);
     };
-    const handleEdit = () => { };
 
     return (
         <Box sx={{ minWidth: 275 }}>
@@ -73,10 +71,10 @@ export const CollectionCard: FC<ICollectionCardComponentProps> = ({ author, desc
                             }}
                         >
                             <List component="nav" aria-label="secondary mailbox folder" onClick={handleClose}>
-                                <ListItemButton
-                                    onClick={handleEdit}
-                                >
-                                    <ListItemText primary="Редактировать" />
+                                <ListItemButton>
+                                    <Link href={`edit/${_id}`} style={{textDecoration: 'none', color: 'black'}}>
+                                        <ListItemText primary="Редактировать" />
+                                    </Link>
                                 </ListItemButton>
                                 <ListItemButton
                                     onClick={() => setIsRemoveModal(true)}

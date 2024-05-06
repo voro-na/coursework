@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import { Button, Snackbar, Stack, TextField } from '@mui/material';
-import { FieldArray, Form, FormikHelpers, FormikProvider, useFormik } from 'formik';
+import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import { useUnit } from 'effector-react';
-import { collectionModel } from './CreateEditPage.model/create-model';
+import { collectionModel } from './CreateCollectionPage.model/create-model';
 import { CardCreate } from '@/components/components.common/CardCreate/CardCreate';
 import { NewMCollectionSchema, CardSchema, validationSchema } from '@/types/collection';
 
@@ -18,7 +18,7 @@ const initialCollection = {
     }],
 };
 
-export const CreateEditPage: FC = () => {
+export const CreateCollectionPage: FC = () => {
 
     const [isNotifyOpen, setIsNotifyOpen] = useState(false);
 

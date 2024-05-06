@@ -3,7 +3,7 @@ import { Collection } from './schemas/collection.schema';
 import { Model, ObjectId, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Card } from './schemas/card.schema';
-import { CreateCollectionDto } from './dto/create-collection.dto';
+import { CreateCardDto, CreateCollectionDto, updatedCollectionDto } from './dto/create-collection.dto';
 
 @Injectable()
 export class CollectionService {
@@ -20,14 +20,14 @@ export class CollectionService {
     for (const cardDto of dto.cards) {
       const card = await this.cardModel.create({
         ...cardDto,
-        collection: null, 
+        collection: null,
       });
-      cards.push(card); 
+      cards.push(card);
     }
 
     const collection = await this.CollectionModel.create({
       ...dto,
-      cards: cards, 
+      cards: cards,
       createdAt,
       editAt: createdAt,
     });
@@ -42,8 +42,56 @@ export class CollectionService {
     return collection;
   }
 
+  async editCollection(collectionId: ObjectId, updateDto: updatedCollectionDto): Promise<Collection> {
+
+    const collection = await this.CollectionModel.findById(collectionId);
+
+    if (!collection) {
+      throw new NotFoundException('Collection not found');
+    }
+
+    if (updateDto.title) {
+      collection.title = updateDto.title;
+    }
+
+    if (updateDto.description) {
+      collection.description = updateDto.description;
+    }
+
+    if (updateDto.author) {
+      collection.author = updateDto.author;
+    }
+
+    if (updateDto.newCards && updateDto.newCards.length > 0) {
+      for (const cardDto of updateDto.newCards) {
+          this.addCard(cardDto, collectionId);
+      }
+    }
+    const updatedCollection = await collection.save();
+
+    return updatedCollection;
+  }
+
+  async addCard(dto: CreateCardDto, collectionId: ObjectId): Promise<Card> {
+    const card = await this.cardModel.create({
+      ...dto,
+      collection: collectionId
+    });
+
+    const collection = await this.CollectionModel.findById(collectionId);
+
+    if (!collection) {
+      throw new NotFoundException('Collection not found');
+    }
+    collection.cards.push(card);
+
+    await collection.save();
+
+    return card;
+  }
+
   async getOne(id: ObjectId): Promise<Collection> {
-    const collection= await this.CollectionModel.findById(id).populate({path: 'cards'}).exec();
+    const collection = await this.CollectionModel.findById(id).populate({ path: 'cards' }).exec();
     return collection;
   }
 

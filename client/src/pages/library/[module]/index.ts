@@ -1,6 +1,6 @@
-import { ModulePage } from "@/components/components.pages/ModulePage";
-import { getModulePageServerSideProps } from "@/components/components.pages/ModulePage/ModulePageServerSideProps";
+import { CollectionPage } from "@/components/components.pages/CollectionPage/CollectionPage";
+import { getCollectionPageServerSideProps } from "@/components/components.pages/CollectionPage/CollectionPageServerSideProps";
 
-export const getServerSideProps = getModulePageServerSideProps;
+export const getServerSideProps = getCollectionPageServerSideProps;
 
-export default ModulePage;
+export default CollectionPage;

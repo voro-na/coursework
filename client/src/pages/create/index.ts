@@ -1,5 +1,8 @@
-import { CreateEditPage, getCreateEditPageServerSideProps } from "@/components/components.pages/CreateEditPage";
+import {
+  CreateCollectionPage,
+  getCreateEditPageServerSideProps,
+} from "@/components/components.pages/CreateCollectionPage";
 
 export const getServerSideProps = getCreateEditPageServerSideProps;
 
-export default CreateEditPage;
+export default CreateCollectionPage;

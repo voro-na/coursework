@@ -5,13 +5,13 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { FC, useState } from 'react';
-import { ICollectionItem } from '@/types/module';
 import Divider from '@mui/material/Divider';
 import StarIcon from '@mui/icons-material/Star';
 import { IconButton } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { BasicModal } from '../Modal';
+import { ICollectionItem } from '@/types/collection';
 
 interface IListItemProps extends ICollectionItem {
     onRemove: (payload: { cardId: string }) => void

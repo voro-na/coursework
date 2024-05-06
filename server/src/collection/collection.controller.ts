@@ -6,10 +6,11 @@ import {
   NotFoundException,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
-import { CreateCollectionDto } from './dto/create-collection.dto';
+import { CreateCardDto, CreateCollectionDto } from './dto/create-collection.dto';
 import { ObjectId } from 'mongoose';
 
 @Controller('/collections')
@@ -19,6 +20,26 @@ export class CollectionController {
   @Post()
   create(@Body() dto: CreateCollectionDto) {
     return this.collectionService.create(dto);
+  }
+
+  @Put(':collectionId')
+  async editCollection(
+    @Param('collectionId') collectionId: ObjectId,
+    @Body() updateDto: CreateCollectionDto,
+  ) {
+    try {
+      return this.collectionService.editCollection(collectionId, updateDto);
+    } catch (error) {
+      // Handle error (e.g., log, return specific response)
+      throw error;
+    }
+  }
+
+  @Post(':collectionId/card')
+  createCard(
+    @Body() dto: CreateCardDto,
+    @Param('collectionId') collectionId: ObjectId) {
+    return this.collectionService.addCard(dto, collectionId);
   }
 
   @Get(':id')
