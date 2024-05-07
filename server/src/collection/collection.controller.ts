@@ -10,12 +10,15 @@ import {
   Query,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
-import { CreateCardDto, CreateCollectionDto } from './dto/create-collection.dto';
+import {
+  CreateCardDto,
+  CreateCollectionDto,
+} from './dto/create-collection.dto';
 import { ObjectId } from 'mongoose';
 
 @Controller('/collections')
 export class CollectionController {
-  constructor(private collectionService: CollectionService) { }
+  constructor(private collectionService: CollectionService) {}
 
   @Post()
   create(@Body() dto: CreateCollectionDto) {
@@ -38,7 +41,8 @@ export class CollectionController {
   @Post(':collectionId/card')
   createCard(
     @Body() dto: CreateCardDto,
-    @Param('collectionId') collectionId: ObjectId) {
+    @Param('collectionId') collectionId: ObjectId,
+  ) {
     return this.collectionService.addCard(dto, collectionId);
   }
 
@@ -65,14 +69,15 @@ export class CollectionController {
   @Delete(':collectionId/card/:cardId')
   deleteCard(
     @Param('collectionId') collectionId: ObjectId,
-    @Param('cardId') cardId: ObjectId) {
+    @Param('cardId') cardId: ObjectId,
+  ) {
     try {
       return this.collectionService.deleteCard(collectionId, cardId);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
       }
-      throw error
+      throw error;
     }
   }
 }

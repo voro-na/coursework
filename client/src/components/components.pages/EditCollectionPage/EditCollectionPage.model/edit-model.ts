@@ -1,6 +1,6 @@
 import { atom } from '@/shared/atom'
 import { ICollectionDetails } from '@/types/collection'
-import { createApi, createEvent, createStore, restore, sample } from 'effector'
+import { createEvent, createStore, restore, sample } from 'effector'
 import { updateCollectionFx } from '../EditCollectionPage.api'
 
 export const collectionModel = atom(() => {
@@ -14,16 +14,7 @@ export const collectionModel = atom(() => {
         _id: '',
     })
 
-    const $isNotify = createStore<boolean>(false)
     const $notifyMessage = createStore<string>('')
-
-    const $mode = createStore<'create' | 'edit'>('create')
-    const { setFormMode } = createApi($mode, {
-        setFormMode: (_, mode: 'create' | 'edit') => mode,
-    })
-
-    $isNotify.on(updateCollectionFx.doneData, () => true)
-    $isNotify.on(updateCollectionFx.fail, () => true)
 
     sample({
         clock: updateCollectionFx.doneData,
@@ -39,10 +30,7 @@ export const collectionModel = atom(() => {
 
     return {
         pageStarted,
-        $isNotify,
-        $mode,
         $notifyMessage,
-        setFormMode,
         $collection,
         updateCollectionFx,
     }

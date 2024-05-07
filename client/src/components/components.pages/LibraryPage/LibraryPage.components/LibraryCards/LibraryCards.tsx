@@ -8,8 +8,6 @@ export const LibraryCards: FC = () => {
 
     const [cards, removeCollection] = useUnit([libraryModel.$cards, libraryModel.removeCollection]);
 
-    console.log(cards);
-
     return (
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
             {cards.map((card, index) => (

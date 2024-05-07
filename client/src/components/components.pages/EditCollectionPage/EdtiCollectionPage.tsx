@@ -6,28 +6,31 @@ import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import { useUnit } from 'effector-react';
 import { collectionModel } from './EditCollectionPage.model/edit-model';
 import { CardCreate } from '@/components/components.common/CardCreate/CardCreate';
-import { NewMCollectionSchema, CardSchema, validationSchema } from '@/types/collection';
+import { NewMCollectionSchema, CardSchema, validationSelectionSchema } from '@/types/collection';
+import { useRouter } from 'next/router';
 
 export const EditCollectionPage: FC = () => {
 
     const [isNotifyOpen, setIsNotifyOpen] = useState(false);
+    const router = useRouter();
 
     const [updateCollection, notifyMessage] = useUnit([
         collectionModel.updateCollectionFx,
-        collectionModel.$notifyMessage]) 
+        collectionModel.$notifyMessage])
     const collection = useUnit(collectionModel.$collection);
 
     const onSubmit = async (values: NewMCollectionSchema, { resetForm }: FormikHelpers<NewMCollectionSchema>) => {
         try {
-            await updateCollection({id: collection._id, data: values})
+            await updateCollection({ id: collection._id, data: values })
             resetForm();
+            router.push('/library');
         } catch (_e) { }
         setIsNotifyOpen(true);
     };
 
     const formik = useFormik<NewMCollectionSchema>({
         initialValues: collection,
-        validationSchema: validationSchema,
+        validationSchema: validationSelectionSchema,
         onSubmit,
     });
 

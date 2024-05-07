@@ -6,7 +6,8 @@ import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import { useUnit } from 'effector-react';
 import { collectionModel } from './CreateCollectionPage.model/create-model';
 import { CardCreate } from '@/components/components.common/CardCreate/CardCreate';
-import { NewMCollectionSchema, CardSchema, validationSchema } from '@/types/collection';
+import { NewMCollectionSchema, CardSchema, validationSelectionSchema } from '@/types/collection';
+import { useRouter } from 'next/router';
 
 const initialCollection = {
     title: '',
@@ -21,6 +22,7 @@ const initialCollection = {
 export const CreateCollectionPage: FC = () => {
 
     const [isNotifyOpen, setIsNotifyOpen] = useState(false);
+    const router = useRouter();
 
     const [createCollection, notifyMessage] = useUnit([
         collectionModel.createCollectionFx,
@@ -30,13 +32,14 @@ export const CreateCollectionPage: FC = () => {
         try {
             await createCollection(values)
             resetForm();
+            router.push('/library');
         } catch (_e) { }
         setIsNotifyOpen(true);
     };
 
     const formik = useFormik<NewMCollectionSchema>({
         initialValues: initialCollection,
-        validationSchema: validationSchema,
+        validationSchema: validationSelectionSchema,
         onSubmit,
     });
 

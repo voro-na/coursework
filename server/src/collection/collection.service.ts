@@ -3,14 +3,18 @@ import { Collection } from './schemas/collection.schema';
 import { Model, ObjectId, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Card } from './schemas/card.schema';
-import { CreateCardDto, CreateCollectionDto, updatedCollectionDto } from './dto/create-collection.dto';
+import {
+  CreateCardDto,
+  CreateCollectionDto,
+  updatedCollectionDto,
+} from './dto/create-collection.dto';
 
 @Injectable()
 export class CollectionService {
   constructor(
     @InjectModel(Collection.name) private CollectionModel: Model<Collection>,
     @InjectModel(Card.name) private cardModel: Model<Card>,
-  ) { }
+  ) {}
 
   async create(dto: CreateCollectionDto): Promise<Collection> {
     const createdAt = new Date();
@@ -35,15 +39,17 @@ export class CollectionService {
     if (cards.length > 0) {
       await this.cardModel.updateMany(
         { _id: { $in: cards } },
-        { $set: { collection: collection._id } }
+        { $set: { collection: collection._id } },
       );
     }
 
     return collection;
   }
 
-  async editCollection(collectionId: ObjectId, updateDto: updatedCollectionDto): Promise<Collection> {
-
+  async editCollection(
+    collectionId: ObjectId,
+    updateDto: CreateCollectionDto,
+  ): Promise<Collection> {
     const collection = await this.CollectionModel.findById(collectionId);
 
     if (!collection) {
@@ -62,9 +68,13 @@ export class CollectionService {
       collection.author = updateDto.author;
     }
 
-    if (updateDto.newCards && updateDto.newCards.length > 0) {
-      for (const cardDto of updateDto.newCards) {
-          this.addCard(cardDto, collectionId);
+    const cardsIds = collection.cards.map((card) => '' + card);
+
+    cardsIds.forEach((id) => this.deleteCard(collectionId, id));
+
+    if (updateDto.cards && updateDto.cards.length > 0) {
+      for (const cardDto of updateDto.cards) {
+        this.addCard(cardDto, collectionId);
       }
     }
     const updatedCollection = await collection.save();
@@ -74,8 +84,9 @@ export class CollectionService {
 
   async addCard(dto: CreateCardDto, collectionId: ObjectId): Promise<Card> {
     const card = await this.cardModel.create({
-      ...dto,
-      collection: collectionId
+      description: dto.description,
+      termin: dto.termin,
+      collection: collectionId,
     });
 
     const collection = await this.CollectionModel.findById(collectionId);
@@ -91,7 +102,9 @@ export class CollectionService {
   }
 
   async getOne(id: ObjectId): Promise<Collection> {
-    const collection = await this.CollectionModel.findById(id).populate({ path: 'cards' }).exec();
+    const collection = await this.CollectionModel.findById(id)
+      .populate({ path: 'cards' })
+      .exec();
     return collection;
   }
 
@@ -112,14 +125,19 @@ export class CollectionService {
     return collection._id;
   }
 
-  async deleteCard(collectionId: ObjectId, cardId: ObjectId): Promise<Types.ObjectId> {
+  async deleteCard(
+    collectionId: ObjectId,
+    cardId: ObjectId | string,
+  ): Promise<Types.ObjectId> {
     const collection = await this.CollectionModel.findById(collectionId);
 
     if (!collection) {
       throw new NotFoundException('Collection not found');
     }
 
-    collection.cards = collection.cards.filter((card) => '' + card !== String(cardId));
+    collection.cards = collection.cards.filter(
+      (card) => '' + card !== String(cardId),
+    );
 
     const card = await this.cardModel.findByIdAndDelete(cardId);
     await collection.save();
