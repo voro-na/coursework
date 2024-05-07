@@ -1,2 +1,2 @@
-export * from "./EdtiCollectionPage";
-export * from "./EditCollectionPageServerSideProps";
+export * from './EdtiCollectionPage'
+export * from './EditCollectionPageServerSideProps'

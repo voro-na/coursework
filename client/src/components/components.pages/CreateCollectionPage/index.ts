@@ -1,2 +1,2 @@
-export * from "./CreateCollectionPage";
-export * from "./CreateCollectionPageServerSideProps";
+export * from './CreateCollectionPage'
+export * from './CreateCollectionPageServerSideProps'

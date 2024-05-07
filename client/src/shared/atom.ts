@@ -1,1 +1,1 @@
-export const atom = <T>(factory: () => T) => factory();
+export const atom = <T>(factory: () => T) => factory()
