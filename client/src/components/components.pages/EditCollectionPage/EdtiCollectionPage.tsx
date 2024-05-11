@@ -23,7 +23,7 @@ export const EditCollectionPage: FC = () => {
         try {
             await updateCollection({ id: collection._id, data: values })
             resetForm();
-            router.push('/library');
+            router.push('/');
         } catch (_e) { }
         setIsNotifyOpen(true);
     };

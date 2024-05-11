@@ -6,27 +6,36 @@ import { Card } from './schemas/card.schema';
 import {
   CreateCardDto,
   CreateCollectionDto,
-  updatedCollectionDto,
 } from './dto/create-collection.dto';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class CollectionService {
   constructor(
     @InjectModel(Collection.name) private CollectionModel: Model<Collection>,
     @InjectModel(Card.name) private cardModel: Model<Card>,
-  ) {}
+    @InjectModel(User.name) private userModel: Model<User>,
+  ) { }
 
-  async create(dto: CreateCollectionDto): Promise<Collection> {
+  async create(dto: CreateCollectionDto, userId: ObjectId): Promise<Collection> {
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new Error('Пользователь не найден');
+    }
+
     const createdAt = new Date();
 
     const cards = [];
 
-    for (const cardDto of dto.cards) {
-      const card = await this.cardModel.create({
-        ...cardDto,
-        collection: null,
-      });
-      cards.push(card);
+    if (dto.cards) {
+      for (const cardDto of dto.cards) {
+        const card = await this.cardModel.create({
+          ...cardDto,
+          collection: null,
+        });
+        cards.push(card);
+      }
     }
 
     const collection = await this.CollectionModel.create({
@@ -34,6 +43,7 @@ export class CollectionService {
       cards: cards,
       createdAt,
       editAt: createdAt,
+      user: userId,
     });
 
     if (cards.length > 0) {
@@ -42,6 +52,9 @@ export class CollectionService {
         { $set: { collection: collection._id } },
       );
     }
+
+    user.collections.push(collection);
+    await user.save();
 
     return collection;
   }
@@ -108,8 +121,8 @@ export class CollectionService {
     return collection;
   }
 
-  async getAll(count = 10, offset = 0): Promise<Collection[]> {
-    return await this.CollectionModel.find().skip(offset).limit(count);
+  async getAll(count = 10, offset = 0, userId: string): Promise<Collection[]> {
+    return await this.CollectionModel.find({ user: userId }).skip(offset).limit(count);
   }
 
   async search(query: string): Promise<Collection[]> {

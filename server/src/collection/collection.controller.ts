@@ -8,6 +8,8 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
+  Request
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import {
@@ -15,14 +17,17 @@ import {
   CreateCollectionDto,
 } from './dto/create-collection.dto';
 import { ObjectId } from 'mongoose';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('/collections')
 export class CollectionController {
   constructor(private collectionService: CollectionService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() dto: CreateCollectionDto) {
-    return this.collectionService.create(dto);
+  create(@Body() dto: CreateCollectionDto, @Request() req) {
+    const userId = req.user.sub;
+    return this.collectionService.create(dto, userId);
   }
 
   @Put(':collectionId')
@@ -33,7 +38,6 @@ export class CollectionController {
     try {
       return this.collectionService.editCollection(collectionId, updateDto);
     } catch (error) {
-      // Handle error (e.g., log, return specific response)
       throw error;
     }
   }
@@ -45,16 +49,25 @@ export class CollectionController {
   ) {
     return this.collectionService.addCard(dto, collectionId);
   }
-
+  
+  @UseGuards(AuthGuard)
   @Get(':id')
   getOne(@Param('id') id: ObjectId) {
     return this.collectionService.getOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
-  getAll(@Query('count') count: number, @Query('offset') offset: number) {
-    return this.collectionService.getAll(count, offset);
+  getAll(@Query('count') count: number, @Query('offset') offset: number, @Request() req) {
+    const userId = req.user.sub;
+    return this.collectionService.getAll(count, offset, userId);
   }
+
+  // @UseGuards(AuthGuard)
+  // @Get()
+  // getProfile(@Request() req) {
+  //   return this.authService.getCards(req.user.username);
+  // }
 
   @Get('search')
   search(@Query('query') query: string) {

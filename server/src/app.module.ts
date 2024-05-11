@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { CollectionModule } from './collection/collection.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CorsModule } from './middleware/cors.middleware';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -10,6 +12,8 @@ import { CorsModule } from './middleware/cors.middleware';
     ),
     CollectionModule,
     CorsModule,
+    AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

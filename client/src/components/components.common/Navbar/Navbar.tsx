@@ -34,7 +34,7 @@ export const NavBar: React.FC = () => {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -85,7 +85,7 @@ export const NavBar: React.FC = () => {
                                 </Button>
                             </Link>
                         ))}
-                    </Box>
+                    </Box> */}
 
                     <div className={styles.search}>
                         <div className={styles.searchIconWrapper}>
