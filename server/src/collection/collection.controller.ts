@@ -8,7 +8,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
   Request
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
@@ -17,15 +16,15 @@ import {
   CreateCollectionDto,
 } from './dto/create-collection.dto';
 import { ObjectId } from 'mongoose';
-import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('/collections')
 export class CollectionController {
-  constructor(private collectionService: CollectionService) {}
+  constructor(private collectionService: CollectionService) { }
 
-  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() dto: CreateCollectionDto, @Request() req) {
+  create(
+    @Body() dto: CreateCollectionDto,
+    @Request() req) {
     const userId = req.user.sub;
     return this.collectionService.create(dto, userId);
   }
@@ -34,9 +33,11 @@ export class CollectionController {
   async editCollection(
     @Param('collectionId') collectionId: ObjectId,
     @Body() updateDto: CreateCollectionDto,
+    @Request() req
   ) {
+    const userId = req.user.sub;
     try {
-      return this.collectionService.editCollection(collectionId, updateDto);
+      return this.collectionService.editCollection(collectionId, updateDto, userId);
     } catch (error) {
       throw error;
     }
@@ -46,43 +47,39 @@ export class CollectionController {
   createCard(
     @Body() dto: CreateCardDto,
     @Param('collectionId') collectionId: ObjectId,
+    @Request() req
   ) {
     return this.collectionService.addCard(dto, collectionId);
   }
-  
-  @UseGuards(AuthGuard)
+
   @Get(':id')
-  getOne(@Param('id') id: ObjectId) {
+  getOne(@Param('id') id: ObjectId, @Request() req) {
     return this.collectionService.getOne(id);
   }
 
-  @UseGuards(AuthGuard)
   @Get()
   getAll(@Query('count') count: number, @Query('offset') offset: number, @Request() req) {
     const userId = req.user.sub;
     return this.collectionService.getAll(count, offset, userId);
   }
 
-  // @UseGuards(AuthGuard)
-  // @Get()
-  // getProfile(@Request() req) {
-  //   return this.authService.getCards(req.user.username);
-  // }
-
   @Get('search')
-  search(@Query('query') query: string) {
-    return this.collectionService.search(query);
+  search(@Query('query') query: string, @Request() req) {
+    const userId = req.user.sub;
+    return this.collectionService.search(query, userId);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: ObjectId) {
-    return this.collectionService.delete(id);
+  delete(@Param('id') id: ObjectId, @Request() req) {
+    const userId = req.user.sub;
+    return this.collectionService.delete(id, userId);
   }
 
   @Delete(':collectionId/card/:cardId')
   deleteCard(
     @Param('collectionId') collectionId: ObjectId,
     @Param('cardId') cardId: ObjectId,
+    @Request() req
   ) {
     try {
       return this.collectionService.deleteCard(collectionId, cardId);

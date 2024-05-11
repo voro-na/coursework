@@ -62,6 +62,7 @@ export class CollectionService {
   async editCollection(
     collectionId: ObjectId,
     updateDto: CreateCollectionDto,
+    userId: ObjectId
   ): Promise<Collection> {
     const collection = await this.CollectionModel.findById(collectionId);
 
@@ -125,16 +126,29 @@ export class CollectionService {
     return await this.CollectionModel.find({ user: userId }).skip(offset).limit(count);
   }
 
-  async search(query: string): Promise<Collection[]> {
+  async search(query: string, userId: ObjectId): Promise<Collection[]> {
     const collections = await this.CollectionModel.find({
       title: { $regex: new RegExp(query, 'i') },
+      user: userId,
     });
 
     return collections;
   }
 
-  async delete(id: ObjectId): Promise<Types.ObjectId> {
+  async delete(id: ObjectId, userId: ObjectId): Promise<Types.ObjectId> {
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new Error('Пользователь не найден');
+    }
+
     const collection = await this.CollectionModel.findByIdAndDelete(id);
+
+    user.collections = user.collections.filter(
+      collection => '' + collection !== String(id)
+    )
+    await user.save();
+
     return collection._id;
   }
 
@@ -142,6 +156,7 @@ export class CollectionService {
     collectionId: ObjectId,
     cardId: ObjectId | string,
   ): Promise<Types.ObjectId> {
+    
     const collection = await this.CollectionModel.findById(collectionId);
 
     if (!collection) {
