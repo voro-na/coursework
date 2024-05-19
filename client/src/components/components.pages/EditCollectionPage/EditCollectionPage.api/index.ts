@@ -1,26 +1,28 @@
 import { createRequestFx } from '@/shared/api-request/request'
+import { apiRoutes } from '@/shared/apiRoutes'
 import { ICollection, ICollectionDetails } from '@/types/collection'
 
 interface CreateCollection {
     title: string
     description: string
     author: string
-    cards: any[]
+    cards: string[]
 }
 
 export const fetchCollectionFx = createRequestFx<
-    { id: string },
+    { id: string, header?: string },
     ICollectionDetails
->(({ id }) => ({
-    url: `http://localhost:3001/collections/${id}`,
+>(({ id, header }) => ({
+    url: apiRoutes.collection.list(id),
     method: 'GET',
+    header,
 }))
 
 export const updateCollectionFx = createRequestFx<
     { id: string; data: CreateCollection },
     ICollection
 >(({ id, data }) => ({
-    url: `http://localhost:3001/collections/${id}`,
+    url: apiRoutes.collection.list(id),
     method: 'PUT',
     body: { json: data },
 }))

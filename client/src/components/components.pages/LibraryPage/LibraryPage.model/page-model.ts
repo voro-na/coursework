@@ -26,6 +26,7 @@ export const libraryModel = atom(() => {
     return {
         pageStarted,
         $cards,
+        fetchCollection: fetchCollectionsFx,
         removeCollection: removeCollectionFx,
         SelectionsPageGate,
     }

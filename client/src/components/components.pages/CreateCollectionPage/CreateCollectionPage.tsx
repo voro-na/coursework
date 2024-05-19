@@ -32,7 +32,7 @@ export const CreateCollectionPage: FC = () => {
         try {
             await createCollection(values)
             resetForm();
-            router.push('/');
+            await router.push('/');
         } catch (_e) { }
         setIsNotifyOpen(true);
     };

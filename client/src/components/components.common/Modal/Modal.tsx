@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import styles from './style.module.css';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Stack } from '@mui/material';
 
 interface IModalProps {

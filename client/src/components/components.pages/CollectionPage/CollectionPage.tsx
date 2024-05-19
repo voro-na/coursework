@@ -2,14 +2,16 @@ import React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { ListItem } from '@/components/components.common/ListItem';
 import Typography from '@mui/material/Typography';
-import { useGate, useUnit } from 'effector-react';
+import { useUnit } from 'effector-react';
 import { collectionModel } from './CollectionPage.model/page-model';
 import { Button, Stack } from '@mui/material';
 import Link from 'next/link';
 
 export const CollectionPage = () => {
-
-    const [collection, onRemove] = useUnit([collectionModel.$collection, collectionModel.removeCard])
+    const [collection, onRemove] = useUnit(
+        [collectionModel.$collection,
+        collectionModel.removeCard,
+        collectionModel.fetchCollection])
 
     return (
         <>

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Collection } from './schemas/collection.schema';
-import { Model, ObjectId, Types } from 'mongoose';
+import { Model, ObjectId, Schema, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Card } from './schemas/card.schema';
 import {
@@ -155,7 +155,7 @@ export class CollectionService {
   async deleteCard(
     collectionId: ObjectId,
     cardId: ObjectId | string,
-  ): Promise<Types.ObjectId> {
+  ): Promise<Schema.Types.ObjectId| string> {
     
     const collection = await this.CollectionModel.findById(collectionId);
 
@@ -167,9 +167,9 @@ export class CollectionService {
       (card) => '' + card !== String(cardId),
     );
 
-    const card = await this.cardModel.findByIdAndDelete(cardId);
     await collection.save();
+    await this.cardModel.findByIdAndDelete(cardId);
 
-    return card._id;
+    return cardId;
   }
 }

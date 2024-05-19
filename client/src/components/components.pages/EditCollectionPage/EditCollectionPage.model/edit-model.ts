@@ -1,7 +1,7 @@
 import { atom } from '@/shared/atom'
 import { ICollectionDetails } from '@/types/collection'
 import { createEvent, createStore, restore, sample } from 'effector'
-import { updateCollectionFx } from '../EditCollectionPage.api'
+import { fetchCollectionFx, updateCollectionFx } from '../EditCollectionPage.api'
 
 export const collectionModel = atom(() => {
     const pageStarted = createEvent<ICollectionDetails>()
@@ -28,10 +28,16 @@ export const collectionModel = atom(() => {
         target: $notifyMessage,
     })
 
+    sample({
+        clock: fetchCollectionFx.doneData,
+        target: $collection,
+    })
+
     return {
         pageStarted,
         $notifyMessage,
         $collection,
         updateCollectionFx,
+        fetchCollection: fetchCollectionFx,
     }
 })

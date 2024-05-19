@@ -2,13 +2,10 @@ import React, { FC } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import { LibraryCards } from './LibraryPage.components/LibraryCards';
-import { libraryModel } from './LibraryPage.model/page-model';
-import { useGate } from 'effector-react';
 import { Button, Stack } from '@mui/material';
 import Link from 'next/link';
 
 export const LibraryPage: FC = () => {
-    useGate(libraryModel.SelectionsPageGate);
 
     return (
         <>

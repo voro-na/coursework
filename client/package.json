@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
@@ -23,10 +23,12 @@
     "effector-react": "^23.2.0",
     "formik": "^2.4.5",
     "next": "14.2.1",
+    "nookies": "^2.5.2",
     "patronum": "^2.2.0",
     "prettier": "^3.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "universal-cookie": "^7.1.4",
     "yup": "^1.4.0"
   },
   "devDependencies": {
@@ -35,9 +37,12 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
     "babel-plugin-import": "^1.13.8",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.1",
+    "eslint-plugin-unused-imports": "^3.2.0",
     "typescript": "^5"
   }
 }

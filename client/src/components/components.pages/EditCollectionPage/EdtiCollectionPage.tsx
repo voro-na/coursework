@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import { Button, Snackbar, Stack, TextField } from '@mui/material';
@@ -14,21 +14,27 @@ export const EditCollectionPage: FC = () => {
     const [isNotifyOpen, setIsNotifyOpen] = useState(false);
     const router = useRouter();
 
-    const [updateCollection, notifyMessage] = useUnit([
+    // useEffect(() => {
+    //     fetchCollection({ id: collection._id })
+    // }, [])
+
+    const [updateCollection, notifyMessage, fetchCollection] = useUnit([
         collectionModel.updateCollectionFx,
-        collectionModel.$notifyMessage])
+        collectionModel.$notifyMessage,
+        collectionModel.fetchCollection])
     const collection = useUnit(collectionModel.$collection);
 
     const onSubmit = async (values: NewMCollectionSchema, { resetForm }: FormikHelpers<NewMCollectionSchema>) => {
         try {
             await updateCollection({ id: collection._id, data: values })
             resetForm();
-            router.push('/');
+            await router.push('/');
         } catch (_e) { }
         setIsNotifyOpen(true);
     };
 
     const formik = useFormik<NewMCollectionSchema>({
+        enableReinitialize: true,
         initialValues: collection,
         validationSchema: validationSelectionSchema,
         onSubmit,

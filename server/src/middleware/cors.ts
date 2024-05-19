@@ -11,14 +11,12 @@ export class CorsMiddleware implements NestMiddleware {
     );
     res.header(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     );
 
     if (req.method === 'OPTIONS') {
-      // Respond to OPTIONS request
-      res.sendStatus(200); // Send HTTP OK status for OPTIONS request
+      res.sendStatus(200); 
     } else {
-      // Pass control to the next middleware or route handler
       next();
     }
   }

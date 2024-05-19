@@ -6,19 +6,18 @@ export interface IBackendError {
     details: string
 }
 
-export interface IResponse<TResult = {}, TError = HttpError> {
+export interface IResponse<TResult = object> extends HttpError {
     result: TResult
-    error: TError | null
 }
 
 export type IErrorResponse<TError = HttpError> = Omit<IResponse, 'error'> & {
-    error: TError
+    statusCode: TError
 }
 
 export function isErrorResponse<TError>(
-    response: IResponse<unknown, TError>
+    response: IResponse
 ): response is IErrorResponse<TError> {
-    return response?.error != null
+    return response?.statusCode != null
 }
 
 export type TRequest = GetServerSidePropsContext['req'] & Record<string, any>

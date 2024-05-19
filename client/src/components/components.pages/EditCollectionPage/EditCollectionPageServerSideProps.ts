@@ -1,20 +1,22 @@
 import { fork, allSettled, serialize } from 'effector'
 import { collectionModel } from './EditCollectionPage.model/edit-model'
-import { fetchCollectionFx } from './EditCollectionPage.api'
 import { GetServerSideProps } from 'next'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+import { initialCollectionModel } from '../CollectionPage/CollectionPage.model/page-model'
+import { fetchCollectionFx } from './EditCollectionPage.api'
 
-export const getEditEditPageServerSideProps: GetServerSideProps<
+export const getEditPageServerSideProps: GetServerSideProps<
     any,
     Params
 > = async (context) => {
     const { params } = context
-    const collection = await fetchCollectionFx({
-        id: params?.collectionId || '',
-    })
 
     const scope = fork()
-    await allSettled(collectionModel.pageStarted, { scope, params: collection })
+
+    const authToken = context.req.headers['authorization'];
+    const collection = await fetchCollectionFx({header: authToken, id: params?.collectionId})
+
+    await allSettled(collectionModel.pageStarted, { scope, params: {...collection } })
 
     return {
         props: {

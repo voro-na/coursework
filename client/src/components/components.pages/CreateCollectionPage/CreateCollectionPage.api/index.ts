@@ -1,4 +1,5 @@
 import { createRequestFx } from '@/shared/api-request/request'
+import { apiRoutes } from '@/shared/apiRoutes'
 import { ICollection } from '@/types/collection'
 
 interface CreateCollection {
@@ -11,7 +12,7 @@ export const createCollectionFx = createRequestFx<
     CreateCollection,
     ICollection
 >((collection) => ({
-    url: 'http://localhost:3001/collections',
+    url: apiRoutes.library.index,
     method: 'POST',
     body: { json: collection },
 }))

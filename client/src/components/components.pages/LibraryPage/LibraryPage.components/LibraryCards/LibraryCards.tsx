@@ -5,7 +5,6 @@ import { FC } from "react";
 import { libraryModel } from "../../LibraryPage.model/page-model";
 
 export const LibraryCards: FC = () => {
-
     const [cards, removeCollection] = useUnit([libraryModel.$cards, libraryModel.removeCollection]);
 
     return (

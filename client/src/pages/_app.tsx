@@ -8,8 +8,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return <>
     <EffectorNext values={pageProps.values}>
       <AppCacheProvider {...pageProps}>
-        <NavBar />
-        <Component {...pageProps} />
+          <NavBar />
+          <Component {...pageProps} />
       </AppCacheProvider>
     </EffectorNext>
   </>

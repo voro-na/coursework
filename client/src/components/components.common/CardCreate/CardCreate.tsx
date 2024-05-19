@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Box, Card, CardContent, IconButton, Stack, TextField, } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CardSchema, NewMCollectionSchema } from '@/types/collection';
-import { Field, FieldArrayRenderProps, FormikErrors, FormikTouched, getIn } from 'formik';
+import { FieldArrayRenderProps, FormikErrors, FormikTouched, getIn } from 'formik';
 
 type ICardCreateProps = {
     termin: string,
@@ -33,38 +33,38 @@ export const CardCreate: FC<ICardCreateProps> = ({
     const touchDescription = getIn(touched, `cards[${index}].description`);
 
     return (
-            <Box sx={{ minWidth: 275 }}>
-                <Card variant="outlined">
-                    <CardContent >
-                        <Stack direction="row" spacing={2} justifyContent={'space-between'} >
-                            <TextField
-                                id={`card-termin-${index}`}
-                                label="Термин"
-                                variant="standard"
-                                name={`cards[${index}].termin`}
-                                value={termin}
-                                fullWidth
-                                onChange={(e) => handleCardChange(index, 'termin', e.target.value)}
-                                error={touchTermin && errorTermin ? errorTermin : null}
-                                helperText={touchTermin && errorTermin} />
+        <Box sx={{ minWidth: 275 }}>
+            <Card variant="outlined">
+                <CardContent >
+                    <Stack direction="row" spacing={2} justifyContent={'space-between'} >
+                        <TextField
+                            id={`card-termin-${index}`}
+                            label="Термин"
+                            variant="standard"
+                            name={`cards[${index}].termin`}
+                            value={termin}
+                            fullWidth
+                            onChange={(e) => handleCardChange(index, 'termin', e.target.value)}
+                            error={touchTermin && errorTermin ? errorTermin : null}
+                            helperText={touchTermin && errorTermin} />
 
-                            <TextField
-                                id={`card-description-${index}`}
-                                label="Описание"
-                                variant="standard"
-                                name={`cards[${index}].description`}
-                                value={description}
-                                fullWidth
-                                onChange={(e) => handleCardChange(index, 'description', e.target.value)}
-                                error={touchDescription && errorDescription ? errorDescription : null}
-                                helperText={touchDescription && errorDescription} />
+                        <TextField
+                            id={`card-description-${index}`}
+                            label="Описание"
+                            variant="standard"
+                            name={`cards[${index}].description`}
+                            value={description}
+                            fullWidth
+                            onChange={(e) => handleCardChange(index, 'description', e.target.value)}
+                            error={touchDescription && errorDescription ? errorDescription : null}
+                            helperText={touchDescription && errorDescription} />
 
-                            <IconButton onClick={() => helpers.remove(index)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Stack>
-                    </CardContent>
-                </Card>
-            </Box >
+                        <IconButton onClick={() => helpers.remove(index)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Stack>
+                </CardContent>
+            </Card>
+        </Box >
     );
 }

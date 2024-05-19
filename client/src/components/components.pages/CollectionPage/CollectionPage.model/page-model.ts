@@ -3,7 +3,7 @@ import { atom } from '@/shared/atom'
 import { fetchCollectionFx, removeCardFx } from '../CollectionPage.api'
 import { ICollectionDetails } from '@/types/collection'
 
-const initialCollectionModel = {
+export const initialCollectionModel = {
     title: '',
     description: '',
     author: '',
@@ -41,5 +41,6 @@ export const collectionModel = atom(() => {
         pageStarted,
         $collection,
         removeCard,
+        fetchCollection: fetchCollectionFx
     }
 })

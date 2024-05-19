@@ -16,7 +16,7 @@ export const collectionModel = atom(() => {
     sample({
         clock: createCollectionFx.fail,
         fn: () => 'Ошибка при создании подборки!',
-        target: $notifyMessage,
+        target : $notifyMessage,
     })
 
     return {

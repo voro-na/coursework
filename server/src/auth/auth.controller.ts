@@ -1,7 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { AuthGuard } from './auth.guard';
 import { Public } from 'src/helpers/isPublic';
 
 @Controller('auth')
@@ -16,7 +15,7 @@ export class AuthController {
     }
 
     @Public()
-    @Post('singUp')
+    @Post('signUp')
     createUser(
       @Body() dto: CreateUserDto,
     ) {
